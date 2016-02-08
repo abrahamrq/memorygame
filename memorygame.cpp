@@ -21,12 +21,20 @@ int turns = 0;
 char deck[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '0', '1', '2', '3', '4', '5', '6', '7' };
 bool deck_display[16] = { false };
 GLsizei winWidth = 1000, winHeight = 500;
+
+void shuffle_deck(){
+  for (int i = 0; i < 16; i++){
+    deck_display[i] = false;
+  }
+  std::random_shuffle(&deck[0], &deck[16]);
+}
+
 void init(void){
   glClearColor(0.32, 0.6, 0.32, 1.0);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0.0, 1600.0, 0.0, 500.0);
-  std::random_shuffle(&deck[0], &deck[16]);
+  shuffle_deck();
 }
 
 void randomBackground(){
@@ -123,6 +131,14 @@ void keyboardActions(unsigned char theKey, int mouseX, int mouseY){
         paused = false;
         glutTimerFunc(100, timePassBy, 0);
       }
+      break;
+    case 'r':
+    case 'R':
+      paused = true;
+      started = false;
+      tenthsOfASecond = 0;
+      turns = 0;
+      shuffle_deck();
       break;
     case 27:
       exit(0);
