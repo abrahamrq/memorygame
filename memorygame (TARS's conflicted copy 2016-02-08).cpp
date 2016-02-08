@@ -17,15 +17,14 @@
 int tenthsOfASecond = 0;
 bool paused = true;
 bool started = false;
-int turns = 0;
+int turns = 3;
 char deck[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '0', '1', '2', '3', '4', '5', '6', '7' };
-bool deck_display[16] = { false };
 GLsizei winWidth = 1000, winHeight = 500;
 void init(void){
   glClearColor(0.32, 0.6, 0.32, 1.0);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0.0, 1600.0, 0.0, 500.0);
+  gluOrtho2D(0.0, 1000.0, 0.0, 500.0);
   std::random_shuffle(&deck[0], &deck[16]);
 }
 
@@ -40,9 +39,9 @@ void randomGlColor3ub(){
 
 void cardColor(int i){
   if (i % 2 == 0){
-    glColor3ub(255, 255, 255);
+    glColor3ub(100, 200, 156);
   } else{
-    glColor3ub(32, 39, 200);
+    glColor3ub(100, 200, 156);
   }
 }
 
@@ -74,7 +73,6 @@ void timePassBy(int value){
 }
 
 void displayTime(){
-  cardColor(1);
   std::string time_formatted = format(tenthsOfASecond);
   glRasterPos2f(20, 20);
   for (int i = 0; i < time_formatted.size(); i++){
@@ -83,7 +81,6 @@ void displayTime(){
 }
 
 void displayTurns(){
-  cardColor(1);
   std::ostringstream buffer;
   buffer << "Turns: ";
   buffer << turns;
@@ -97,20 +94,11 @@ void displayTurns(){
 void displayCards(){
   for (int i = 0; i < 16; i++){
     cardColor(i);
-    glBegin(GL_POLYGON);
-    glVertex2f(i * 100, 500);
-    glVertex2f(i * 100 + 100, 500);
-    glVertex2f(i * 100 + 100, 400);
-    glVertex2f(i * 100, 400);
-    glEnd();
-    if (deck_display[i]){
-      cardColor(i+1);
-      glPushMatrix();
-      glScalef(0.85f, 0.85f, 1);
-      glTranslatef(117.647 * i + 13 , 475, 1);
-      glutStrokeCharacter(GLUT_STROKE_ROMAN , deck[i]);
-      glPopMatrix();
-    }
+    glPushMatrix();
+    glScalef(0.6f,0.6f,1);
+    glTranslatef(100*i + 50, 600, 1);
+    glutStrokeCharacter(GLUT_STROKE_ROMAN , deck[i]);
+    glPopMatrix();
   }
 }
 
@@ -129,20 +117,6 @@ void keyboardActions(unsigned char theKey, int mouseX, int mouseY){
       break;
     default:
       break;// do nothing
-  }
-  glutPostRedisplay();
-}
-
-int cardNumber(int x){
-  return x/(glutGet(GLUT_WINDOW_WIDTH)/16);
-}
-
-void mouseActions(int button, int state, int x, int y){
-  if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && started){
-    if (y > 0 && y < glutGet(GLUT_WINDOW_HEIGHT)/5){
-      std::cout << "# CARD SELECTED: "<< cardNumber(x) << '\n';
-      deck_display[cardNumber(x)] = true;
-    }
   }
   glutPostRedisplay();
 }
@@ -166,7 +140,6 @@ int main(int argc, char** argv){
   init();
   glutDisplayFunc(game);
   glutKeyboardFunc(keyboardActions);
-  glutMouseFunc(mouseActions);
   glutMainLoop();
   return 0;
 }
