@@ -141,7 +141,7 @@ void mouseActions(int button, int state, int x, int y){
   if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && started){
     if (y > 0 && y < glutGet(GLUT_WINDOW_HEIGHT)/5){
       std::cout << "# CARD SELECTED: "<< cardNumber(x) << '\n';
-      deck_display[cardNumber(x)] = true;
+      deck_display[cardNumber(x)] = true; // TANIA CON QUE LE PONGAS FALSE AL NUMERO DE CASILLA SE BORRA DE LA PANTALLA
     }
   }
   glutPostRedisplay();
