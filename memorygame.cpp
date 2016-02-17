@@ -61,7 +61,7 @@ void randomGlColor3ub(){
 }
 
 void cardColor(int i){
-    if (highlight_card[i]){
+    if (highlight_card[i] && !letras){
         glColor3ub(255, 255, 100);
     } else {
         if (deck_display[i] && !letras) {
