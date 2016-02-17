@@ -31,6 +31,11 @@ int carta1 = -1;
 int carta2 = -1;
 int encontradas = 0;
 
+void reshape(int x, int y){
+    glViewport(0, 0, x, y);
+    glutPostRedisplay();
+}
+
 void shuffle_deck(){
     for (int i = 0; i < 16; i++){
         deck_display[i] = false;
@@ -340,6 +345,7 @@ int main(int argc, char** argv){
     glutKeyboardFunc(keyboardActions);
     glutPassiveMotionFunc(passiveMotion);
     glutMouseFunc(mouseActions);
+    glutReshapeFunc(reshape);
     glutMainLoop();
     return 0;
 }
