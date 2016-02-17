@@ -238,7 +238,9 @@ void passiveMotion(int x, int y){
         highlight_card[i] = false;
     }
     if (y > 0 && y < glutGet(GLUT_WINDOW_HEIGHT)/5 && (!paused)){
-        highlight_card[cardNumber(x)] = true;
+        if (!deck_display[cardNumber(x)]){
+            highlight_card[cardNumber(x)] = true;
+        }
     }
     glutPostRedisplay();
 }
