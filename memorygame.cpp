@@ -24,6 +24,7 @@ bool letras = false;
 int turns = 0;
 char deck[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '0', '1', '2', '3', '4', '5', '6', '7' };
 bool deck_display[16] = { false };
+bool highlight_card[16] = { false };
 GLsizei winWidth = 800, winHeight = 500;
 int estados = 0;
 int carta1 = -1;
@@ -55,13 +56,16 @@ void randomGlColor3ub(){
 }
 
 void cardColor(int i){
-    if (deck_display[i] && !letras) {
-        glColor3ub(255, 255, 255);
-    }
-    else if (i % 2 == 0){
-        glColor3ub(150, 51, 184);
-    } else{
-        glColor3ub(85, 184, 51);
+    if (highlight_card[i]){
+        glColor3ub(255, 255, 100);
+    } else {
+        if (deck_display[i] && !letras) {
+            glColor3ub(255, 255, 255);
+        } else if (i % 2 == 0){
+            glColor3ub(150, 51, 184);
+        } else{
+            glColor3ub(85, 184, 51);
+        }
     }
 }
 
@@ -226,7 +230,17 @@ void keyboardActions(unsigned char theKey, int mouseX, int mouseY){
 }
 
 int cardNumber(int x){
-    return x/(winWidth/16);
+    return x/(glutGet(GLUT_WINDOW_WIDTH)/16);
+}
+
+void passiveMotion(int x, int y){
+    for (int i = 0; i < 16; i++){
+        highlight_card[i] = false;
+    }
+    if (y > 0 && y < glutGet(GLUT_WINDOW_HEIGHT)/5 && (!paused)){
+        highlight_card[cardNumber(x)] = true;
+    }
+    glutPostRedisplay();
 }
 
 void mouseActions(int button, int state, int x, int y){
@@ -322,6 +336,7 @@ int main(int argc, char** argv){
     init();
     glutDisplayFunc(game);
     glutKeyboardFunc(keyboardActions);
+    glutPassiveMotionFunc(passiveMotion);
     glutMouseFunc(mouseActions);
     glutMainLoop();
     return 0;
